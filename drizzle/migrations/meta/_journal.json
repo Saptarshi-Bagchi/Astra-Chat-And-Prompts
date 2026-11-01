@@ -8,6 +8,13 @@
       "when": 1793517475489,
       "tag": "0000_personal_assistant_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793517521988,
+      "tag": "0001_fix_settings_claim_policy",
+      "breakpoints": true
     }
   ]
 }
