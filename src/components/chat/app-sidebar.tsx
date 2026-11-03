@@ -1,21 +1,15 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useServerFn } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   MessageSquarePlus,
   Pencil,
   Trash2,
-  BookMarked,
   LogOut,
+  PanelLeftCloseIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import {
-  deleteThread,
-  listThreads,
-  renameThread,
-  type PromptTemplate,
-} from "@/lib/chat.functions";
-import { useServerFn } from "@tanstack/react-router";
+import { deleteThread, listThreads, renameThread } from "@/lib/chat.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,8 +59,7 @@ function SidebarContent({ onToggle, email }: Omit<AppSidebarProps, "collapsed">)
   const deleteFn = useServerFn(deleteThread);
 
   const renameMutation = useMutation({
-    mutationFn: (input: { threadId: string; title: string }) =>
-      renameFn({ data: input }),
+    mutationFn: (input: { threadId: string; title: string }) => renameFn({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["threads"] });
       setRenameTarget(null);
@@ -124,43 +117,39 @@ function SidebarContent({ onToggle, email }: Omit<AppSidebarProps, "collapsed">)
           </p>
         )}
         <ul className="space-y-0.5">
-          {threadsQuery.data?.map((thread) => {
-            const active =
-              window.location.pathname === `/app/${thread.id}` ? true : undefined;
-            return (
-              <li key={thread.id} className="group/thread relative">
-                <Link
-                  to="/app/$threadId"
-                  params={{ threadId: thread.id }}
-                  className={cn(
-                    "block truncate rounded-md px-3 py-2 pr-14 text-sm text-sidebar-foreground/90 transition-colors",
-                    "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                    active && "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
-                  )}
+          {threadsQuery.data?.map((thread) => (
+            <li key={thread.id} className="group/thread relative">
+              <Link
+                to="/app/$threadId"
+                params={{ threadId: thread.id }}
+                activeProps={{
+                  className:
+                    "bg-sidebar-accent font-medium text-sidebar-accent-foreground",
+                }}
+                className="block truncate rounded-md px-3 py-2 pr-14 text-sm text-sidebar-foreground/90 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              >
+                {thread.title}
+              </Link>
+              <div className="absolute right-1 top-1/2 hidden -translate-y-1/2 items-center gap-0.5 group-hover/thread:flex">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Rename ${thread.title}`}
+                  onClick={() => setRenameTarget(thread)}
                 >
-                  {thread.title}
-                </Link>
-                <div className="absolute right-1 top-1/2 hidden -translate-y-1/2 items-center gap-0.5 group-hover/thread:flex">
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Rename ${thread.title}`}
-                    onClick={() => setRenameTarget(thread)}
-                  >
-                    <Pencil className="size-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Delete ${thread.title}`}
-                    onClick={() => setDeleteTarget(thread)}
-                  >
-                    <Trash2 className="size-3.5 text-destructive" />
-                  </Button>
-                </div>
-              </li>
-            );
-          })}
+                  <Pencil className="size-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Delete ${thread.title}`}
+                  onClick={() => setDeleteTarget(thread)}
+                >
+                  <Trash2 className="size-3.5 text-destructive" />
+                </Button>
+              </div>
+            </li>
+          ))}
         </ul>
       </nav>
 
@@ -252,7 +241,3 @@ function SidebarContent({ onToggle, email }: Omit<AppSidebarProps, "collapsed">)
     </aside>
   );
 }
-
-import { PanelLeftCloseIcon } from "lucide-react";
-export type { PromptTemplate };
-export { BookMarked };
