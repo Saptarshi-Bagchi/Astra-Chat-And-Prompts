@@ -49,11 +49,9 @@ const SUGGESTIONS = [
 ];
 
 export function ChatView({ threadId }: { threadId: string | null }) {
-  const tanstackNavigate = useTanstackNavigate();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const reactNavigate = useNavigate();
-  const voidNavigate = tanstackNavigate;
+
 
   const messagesQuery = useSuspenseQuery({
     queryKey: ["messages", threadId ?? "new"],
@@ -190,14 +188,14 @@ export function ChatView({ threadId }: { threadId: string | null }) {
       if (threadId) {
         await queryClient.invalidateQueries({ queryKey: ["messages", threadId] });
       } else if (lastSentRef.current) {
-        // New thread was created server-side; find it via threads and move there.
-        const { data: threads } = await queryClient.fetchQuery({
+        // New thread was created server-side; move to it now that streaming is done.
+        const threads = await queryClient.fetchQuery({
           queryKey: ["threads"],
-          queryFn: () => import("@/lib/chat.functions").then((m) => m.listThreads()),
+          queryFn: () => listThreads(),
         });
         const newest = threads?.[0];
         if (newest) {
-          voidNavigate({
+          void navigate({
             to: "/app/$threadId",
             params: { threadId: newest.id },
             replace: true,
@@ -205,7 +203,7 @@ export function ChatView({ threadId }: { threadId: string | null }) {
         }
       }
     },
-    [status, threadId, run, queryClient, voidNavigate]
+    [status, threadId, run, queryClient, navigate]
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
