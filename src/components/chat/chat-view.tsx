@@ -8,7 +8,7 @@ import {
   type FormEvent,
 } from "react";
 import { RotateCcwIcon } from "lucide-react";
-import { listMessages } from "@/lib/chat.functions";
+import { listMessages, listThreads } from "@/lib/chat.functions";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Conversation,
