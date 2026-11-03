@@ -20,7 +20,6 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
 
 interface TemplatesDialogProps {
   onSelect: (body: string) => void;

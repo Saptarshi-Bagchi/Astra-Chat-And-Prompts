@@ -1,5 +1,5 @@
-import { useNavigate, useQueryClient } from "@tanstack/react-query";
-import { useNavigate as useTanstackNavigate } from "@tanstack/react-router";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import {
   useCallback,
   useEffect,
@@ -7,7 +7,6 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { RotateCcwIcon } from "lucide-react";
 import { listMessages } from "@/lib/chat.functions";
 import { supabase } from "@/integrations/supabase/client";
