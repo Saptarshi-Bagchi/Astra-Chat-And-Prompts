@@ -165,5 +165,3 @@ export function TemplatesDialog({ onSelect, trigger }: TemplatesDialogProps) {
     </Dialog>
   );
 }
-
-export const templateDialogClass = cn();
