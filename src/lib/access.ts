@@ -21,5 +21,5 @@ export function decideAccess(
 export function deriveThreadTitle(content: string): string {
   const normalized = content.replace(/\s+/g, " ").trim();
   if (!normalized) return "New chat";
-  return normalized.length <= 60 ? normalized : normalized.slice(0, 57) + "…";
+  return normalized.length <= 60 ? normalized : normalized.slice(0, 59) + "…";
 }

@@ -5,8 +5,9 @@ import {
   useEffect,
   useRef,
   useState,
-  type FormEvent,
 } from "react";
+import type { FormEvent } from "react";
+import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";
 import { RotateCcwIcon } from "lucide-react";
 import { listMessages, listThreads } from "@/lib/chat.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -91,7 +92,7 @@ export function ChatView({ threadId }: { threadId: string | null }) {
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };
-      if (data.session) headers.Authorization = `Bearer ${data.session.access_token}`;
+      if (data.session) headers["Authorization"] = `Bearer ${data.session.access_token}`;
 
       const controller = new AbortController();
       abortRef.current?.abort();
@@ -129,7 +130,7 @@ export function ChatView({ threadId }: { threadId: string | null }) {
           const line = chunk.trim();
           if (!line.startsWith("data:")) continue;
           const event = JSON.parse(line.slice(5)) as Record<string, unknown>;
-          if (event.type === "delta") {
+          if (event["type"] === "delta") {
             if (!assistantAdded) {
               assistantAdded = true;
               setStatus("streaming");
@@ -138,11 +139,11 @@ export function ChatView({ threadId }: { threadId: string | null }) {
                 { id: "tmp-assistant", role: "assistant", content: "" },
               ]);
             }
-            setStreamed((s) => s + (event.text as string));
-          } else if (event.type === "done") {
+            setStreamed((s) => s + (event["text"] as string));
+          } else if (event["type"] === "done") {
             done = true;
-          } else if (event.type === "error") {
-            throw new Error((event.message as string) ?? "Something went wrong.");
+          } else if (event["type"] === "error") {
+            throw new Error((event["message"] as string) ?? "Something went wrong.");
           }
         }
       }
@@ -206,9 +207,12 @@ export function ChatView({ threadId }: { threadId: string | null }) {
     [status, threadId, run, queryClient, navigate]
   );
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(
+    message: PromptInputMessage,
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
-    const text = input.trim();
+    const text = (message.text ?? "").trim() || input.trim();
     if (!text) return;
     setInput("");
     void send(text);
