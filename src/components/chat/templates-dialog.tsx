@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useServerFn } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { BookMarkedIcon, PlusIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
