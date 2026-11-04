@@ -5,8 +5,8 @@ import {
   useEffect,
   useRef,
   useState,
-  type FormEvent,
-} from "react";
+import type { FormEvent } from "react";
+import type { PromptInputMessage } from "@/components/ai-elements/prompt-input";} from "react";
 import { RotateCcwIcon } from "lucide-react";
 import { listMessages, listThreads } from "@/lib/chat.functions";
 import { supabase } from "@/integrations/supabase/client";
