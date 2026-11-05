@@ -15,6 +15,13 @@
       "when": 1793517521988,
       "tag": "0001_fix_settings_claim_policy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793875539795,
+      "tag": "0002_restrict_app_settings_reads",
+      "breakpoints": true
     }
   ]
 }
