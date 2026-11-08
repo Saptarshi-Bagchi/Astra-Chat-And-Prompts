@@ -22,6 +22,13 @@
       "when": 1793875539795,
       "tag": "0002_restrict_app_settings_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794111285345,
+      "tag": "0003_add_private_knowledge_library",
+      "breakpoints": true
     }
   ]
 }
