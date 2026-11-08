@@ -32,6 +32,89 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_chunks: {
+        Row: {
+          chunk_order: number
+          content: string
+          created_at: string
+          embedding: string | null
+          file_name: string
+          id: string
+          metadata: Json
+          source_id: string
+          user_id: string
+        }
+        Insert: {
+          chunk_order: number
+          content: string
+          created_at?: string
+          embedding?: string | null
+          file_name: string
+          id?: string
+          metadata?: Json
+          source_id: string
+          user_id: string
+        }
+        Update: {
+          chunk_order?: number
+          content?: string
+          created_at?: string
+          embedding?: string | null
+          file_name?: string
+          id?: string
+          metadata?: Json
+          source_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_chunks_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_sources: {
+        Row: {
+          content_type: string
+          created_at: string
+          enabled: boolean
+          file_name: string
+          id: string
+          processing_error: string | null
+          status: string
+          storage_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content_type: string
+          created_at?: string
+          enabled?: boolean
+          file_name: string
+          id?: string
+          processing_error?: string | null
+          status?: string
+          storage_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content_type?: string
+          created_at?: string
+          enabled?: boolean
+          file_name?: string
+          id?: string
+          processing_error?: string | null
+          status?: string
+          storage_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -94,6 +177,38 @@ export type Database = {
         }
         Relationships: []
       }
+      rag_queries: {
+        Row: {
+          created_at: string
+          id: string
+          question: string
+          thread_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question: string
+          thread_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question?: string
+          thread_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rag_queries_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       threads: {
         Row: {
           created_at: string
@@ -123,7 +238,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_knowledge_chunks: {
+        Args: { match_count?: number; query_embedding: string }
+        Returns: {
+          chunk_id: string
+          content: string
+          file_name: string
+          metadata: Json
+          similarity: number
+          source_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
