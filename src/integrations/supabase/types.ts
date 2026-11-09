@@ -117,6 +117,7 @@ export type Database = {
       }
       messages: {
         Row: {
+          citations: Json
           content: string
           created_at: string
           id: string
@@ -125,6 +126,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          citations?: Json
           content: string
           created_at?: string
           id?: string
@@ -133,6 +135,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          citations?: Json
           content?: string
           created_at?: string
           id?: string
